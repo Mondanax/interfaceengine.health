@@ -150,6 +150,19 @@
   .tier .action:hover { text-decoration: none; opacity: .6; }
   @media (max-width: 860px) { .tier { grid-template-columns: 1fr; gap: 14px; } }
 
+  /* ── request access ──────────────────────────────────── */
+  .access-sec { border-top: 1px dashed var(--hair-dark); }
+  .access-lede { max-width: 660px; color: rgba(255,255,255,.72); margin-top: -34px; margin-bottom: 54px; }
+  .access-steps { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--hair-dark); }
+  .access-step { padding: 36px 34px 40px 0; border-bottom: 1px solid var(--hair-dark); }
+  .access-step + .access-step { padding-left: 34px; border-left: 1px solid var(--hair-dark); }
+  .access-step .n { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; color: var(--accent); }
+  .access-step h4 { font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: .02em; margin: 14px 0 10px; }
+  .access-step p { color: rgba(255,255,255,.62); font-size: 14px; }
+  @media (max-width: 860px) { .access-steps { grid-template-columns: 1fr; } .access-step + .access-step { padding-left: 0; border-left: none; } }
+  .access-cta { display: inline-block; margin-top: 54px; font-family: var(--mono); font-size: 13px; letter-spacing: .12em; color: var(--ink); background: var(--paper); padding: 18px 34px; text-decoration: none; }
+  .access-cta:hover { background: var(--accent); }
+
   /* ── footer ──────────────────────────────────────────── */
   footer { position: relative; background: var(--ink); padding: 140px 0 60px; overflow: hidden; }
   footer::before {
@@ -336,7 +349,7 @@
             <li>Active-active HA + immutable audit trail</li>
           </ul>
         </div>
-        <a class="action" href="#contact">REQUEST BUNDLE &#8599;</a>
+        <a class="action" href="#access">REQUEST BUNDLE &#8599;</a>
       </div>
       <div class="tier">
         <div><h3>Clinic</h3><div class="who">SELF-HOSTED · VOLUME</div></div>
@@ -348,7 +361,7 @@
             <li>Upgrades to Hospital in place, same data volume</li>
           </ul>
         </div>
-        <a class="action" href="#contact">START A PILOT &#8599;</a>
+        <a class="action" href="#access">START A PILOT &#8599;</a>
       </div>
       <div class="tier">
         <div><h3>Hosted</h3><div class="who">SAAS · NO-IT CLINICS</div></div>
@@ -360,9 +373,36 @@
             <li>Same engine, same routes — migrate anytime</li>
           </ul>
         </div>
-        <a class="action" href="#contact">GET A TENANT &#8599;</a>
+        <a class="action" href="#access">GET A TENANT &#8599;</a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ══ REQUEST ACCESS ══ -->
+<section class="dark sec access-sec" id="access">
+  <div class="wrap">
+    <p class="eyebrow">Private distribution</p>
+    <h2 style="color:#fff">Request the bundle.</h2>
+    <p class="access-lede">Distribution is by invitation. Tell us who you are and which edition fits — we provision access to the private channel, your team downloads the self-contained bundle, and the engine is running inside your network the same day. No connection to us required, before or after install.</p>
+    <div class="access-steps">
+      <div class="access-step">
+        <div class="n">01 / REQUEST</div>
+        <h4>Email us</h4>
+        <p>Your organization, name, GitHub username (used for the access grant), and the edition — Hospital or Clinic.</p>
+      </div>
+      <div class="access-step">
+        <div class="n">02 / INVITED</div>
+        <h4>Access provisioned</h4>
+        <p>We add your team to the private distribution channel — same day, typically within the hour.</p>
+      </div>
+      <div class="access-step">
+        <div class="n">03 / INSTALL</div>
+        <h4>Running in your network</h4>
+        <p>Download, unzip, <span style="font-family:var(--mono);font-size:12.5px">docker compose up</span>, open the console. Under an hour, offline at install.</p>
+      </div>
+    </div>
+    <a class="access-cta" href="mailto:contact@healthtrustiq.com?subject=Bundle%20access%20request%20%E2%80%94%20interfaceengine.health&body=Organization%3A%20%0AName%3A%20%0AGitHub%20username%20(access%20grant)%3A%20%0AEdition%20(Hospital%20%2F%20Clinic)%3A%20%0A">REQUEST ACCESS — CONTACT@HEALTHTRUSTIQ.COM &#8599;</a>
   </div>
 </section>
 
@@ -374,7 +414,7 @@
     <div class="contact">
       <a href="mailto:contact@healthtrustiq.com">contact@healthtrustiq.com</a>
       <a href="#">demo.interfaceengine.health &#8599;</a>
-      <a href="#">Live capability demo — request access &#8599;</a>
+      <a href="#access">Live capability demo — request access &#8599;</a>
     </div>
     <hr class="foot-rule">
     <div class="foot-small">
