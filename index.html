@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interface Engine — Every system. Every format. One engine.</title>
+<meta name="description" content="Healthcare interface engine: HL7 v2, FHIR R4, DICOM, X12, NCPDP and any format in — any format out. Self-hosted Docker bundle, clinic edition, or hosted SaaS with an outbound-only site agent.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #000000;
+    --paper: #ffffff;
+    --ash: #6b6b6b;
+    --accent: #f8473d;
+    --hair-dark: rgba(255,255,255,.14);
+    --hair-light: rgba(0,0,0,.14);
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink); color: var(--paper);
+    font-family: var(--sans); font-weight: 300;
+    font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: var(--ink); }
+
+  /* ── vertical edge label ─────────────────────────────── */
+  .edge {
+    position: fixed; right: 14px; top: 50%; transform: translateY(-50%) rotate(90deg);
+    transform-origin: center; z-index: 40; pointer-events: none;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .42em;
+    color: rgba(255,255,255,.35); white-space: nowrap;
+  }
+  .edge.light { color: rgba(0,0,0,.3); }
+
+  /* ── floating pill nav ───────────────────────────────── */
+  .pill {
+    position: fixed; top: 22px; left: 50%; transform: translateX(-50%);
+    z-index: 50; display: flex; align-items: center; gap: 26px;
+    background: var(--ink); border: 1px solid var(--hair-dark);
+    border-radius: 999px; padding: 10px 24px;
+  }
+  .pill a {
+    color: var(--paper); text-decoration: none;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    transition: opacity .2s ease-out;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .pill a:hover { opacity: .5; }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; }
+  .pill a.cta { color: var(--ink); background: var(--paper); border-radius: 999px; padding: 5px 14px; }
+  .pill a.cta:hover { opacity: .8; }
+  @media (max-width: 760px) { .pill { gap: 14px; padding: 9px 16px; } .pill a.hide-m { display: none; } }
+
+  section { position: relative; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 40px; }
+  @media (max-width: 760px) { .wrap { padding: 0 22px; } }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .3em;
+    text-transform: uppercase; color: var(--ash);
+  }
+  .dark .eyebrow { color: rgba(255,255,255,.45); }
+
+  /* ── hero ────────────────────────────────────────────── */
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 60px; }
+  .hero h1 {
+    font-size: clamp(52px, 9.2vw, 148px); font-weight: 600; line-height: .94;
+    letter-spacing: -.035em; text-transform: uppercase; margin: 26px 0 34px;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { max-width: 560px; color: rgba(255,255,255,.72); font-size: 17px; }
+  .hero-meta { display: flex; gap: 34px; align-items: center; margin-top: 40px; flex-wrap: wrap; }
+  .hero-meta .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: rgba(255,255,255,.5); }
+  .scroll-cue { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .2em; color: rgba(255,255,255,.5); }
+
+  /* live typewriter */
+  .stream {
+    margin-top: 70px; border-top: 1px solid var(--hair-dark);
+    padding-top: 26px; display: grid; grid-template-columns: 1fr 60px 1fr; gap: 20px;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.75;
+  }
+  .stream .col-label { font-size: 10px; letter-spacing: .28em; color: rgba(255,255,255,.4); margin-bottom: 10px; }
+  .stream pre { white-space: pre-wrap; word-break: break-all; min-height: 210px; }
+  .stream .in { color: rgba(255,255,255,.85); }
+  .stream .out { color: #7ee0a3; }
+  .stream .arrow { align-self: center; text-align: center; color: var(--accent); font-size: 20px; }
+  .cursor { display: inline-block; width: 8px; background: var(--accent); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (max-width: 860px) { .stream { grid-template-columns: 1fr; } .stream .arrow { display: none; } }
+
+  /* ── light section: the problem ──────────────────────── */
+  .light { background: var(--paper); color: var(--ink); }
+  .sec { padding: 130px 0; }
+  .sec h2 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 600; letter-spacing: -.025em; line-height: 1.04; text-transform: uppercase; margin: 22px 0 60px; max-width: 900px; }
+  .numlist { border-top: 1px solid var(--hair-light); }
+  .numrow { display: grid; grid-template-columns: 90px 1fr; gap: 30px; padding: 34px 0; border-bottom: 1px solid var(--hair-light); }
+  .numrow .n { font-family: var(--mono); font-size: 12px; color: var(--ash); padding-top: 5px; }
+  .numrow h3 { font-size: 22px; font-weight: 500; letter-spacing: -.01em; margin-bottom: 8px; }
+  .numrow p { max-width: 640px; color: #3d3d3d; }
+  @media (max-width: 760px) { .numrow { grid-template-columns: 1fr; gap: 8px; } }
+
+  /* ── dark section: pipeline diagram ──────────────────── */
+  .dark { background: var(--ink); color: var(--paper); }
+  .dark .numrow { border-bottom: 1px dashed var(--hair-dark); }
+  .dark .numlist { border-top: 1px dashed var(--hair-dark); }
+  .pipeline { margin-top: 70px; width: 100%; }
+  .pipeline text { font-family: var(--mono); fill: rgba(255,255,255,.75); }
+  .pipeline .step-t { font-size: 12px; letter-spacing: .12em; }
+  .pipeline .step-d { font-size: 10px; fill: rgba(255,255,255,.4); letter-spacing: .06em; }
+  .pipeline .flow { stroke: var(--accent); stroke-width: 1.5; fill: none; stroke-dasharray: 6 5; animation: flowdash 1.4s linear infinite; }
+  @keyframes flowdash { to { stroke-dashoffset: -11; } }
+
+  /* ── accent band ─────────────────────────────────────── */
+  .band { background: var(--accent); color: var(--ink); padding: 110px 0; }
+  .band .eyebrow { color: rgba(0,0,0,.55); }
+  .band h2 { font-size: clamp(40px, 6.4vw, 96px); font-weight: 600; letter-spacing: -.03em; line-height: .98; text-transform: uppercase; margin-top: 20px; }
+  .band .formats { margin-top: 54px; display: flex; flex-wrap: wrap; gap: 12px 0; font-family: var(--mono); font-size: 13px; letter-spacing: .1em; }
+  .band .formats span { padding: 6px 18px; border: 1px solid rgba(0,0,0,.5); border-radius: 999px; margin-right: 12px; }
+  .band p { max-width: 620px; margin-top: 40px; font-weight: 400; }
+
+  /* ── comparison matrix ───────────────────────────────── */
+  table.matrix { width: 100%; border-collapse: collapse; margin-top: 56px; font-size: 14px; }
+  .matrix th, .matrix td { text-align: left; padding: 16px 14px; border-bottom: 1px solid var(--hair-light); vertical-align: top; }
+  .matrix thead th { font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--ash); border-bottom: 1px solid rgba(0,0,0,.35); }
+  .matrix td:first-child { font-weight: 500; max-width: 340px; }
+  .matrix td { color: #2c2c2c; }
+  .matrix .mono { font-family: var(--mono); font-size: 12px; }
+  .yes { color: var(--ink); font-family: var(--mono); }
+  .no { color: #b6b6b0; font-family: var(--mono); }
+  .us-col { background: rgba(248,71,61,.06); }
+  .matrix .legend { margin-top: 18px; font-family: var(--mono); font-size: 11px; color: var(--ash); }
+  @media (max-width: 860px) { .matrix .hide-m { display: none; } }
+
+  /* ── tiers ───────────────────────────────────────────── */
+  .tiers { border-top: 1px solid var(--hair-dark); margin-top: 20px; }
+  .tier { display: grid; grid-template-columns: 240px 1fr 200px; gap: 34px; padding: 44px 0; border-bottom: 1px solid var(--hair-dark); align-items: start; }
+  .tier h3 { font-size: 26px; font-weight: 600; letter-spacing: -.015em; text-transform: uppercase; }
+  .tier .who { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: rgba(255,255,255,.45); margin-top: 8px; }
+  .tier p { color: rgba(255,255,255,.72); max-width: 560px; }
+  .tier ul { margin-top: 14px; list-style: none; }
+  .tier li { font-family: var(--mono); font-size: 12px; color: rgba(255,255,255,.6); padding: 4px 0; }
+  .tier li::before { content: '→ '; color: var(--accent); }
+  .tier .action { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; color: var(--paper); text-decoration: underline; text-underline-offset: 4px; white-space: nowrap; }
+  .tier .action:hover { text-decoration: none; opacity: .6; }
+  @media (max-width: 860px) { .tier { grid-template-columns: 1fr; gap: 14px; } }
+
+  /* ── footer ──────────────────────────────────────────── */
+  footer { position: relative; background: var(--ink); padding: 140px 0 60px; overflow: hidden; }
+  footer::before {
+    content: ''; position: absolute; top: -160px; left: 0; right: 0; height: 320px;
+    background: linear-gradient(to top, rgba(248,71,61,.55), transparent); pointer-events: none;
+  }
+  footer h2 { font-size: clamp(38px, 6vw, 88px); font-weight: 600; letter-spacing: -.03em; line-height: 1; text-transform: uppercase; position: relative; }
+  footer .contact { margin-top: 44px; display: flex; gap: 40px; flex-wrap: wrap; position: relative; }
+  footer .contact a {
+    color: var(--paper); font-family: var(--mono); font-size: 13px; letter-spacing: .08em;
+    text-decoration: underline; text-underline-offset: 5px; transition: opacity .2s ease-out;
+  }
+  footer .contact a:hover { text-decoration: none; opacity: .55; }
+  .foot-rule { border: none; border-top: 1px solid var(--hair-dark); margin: 90px 0 26px; position: relative; }
+  .foot-small { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; color: rgba(255,255,255,.4); position: relative; }
+</style>
+</head>
+<body>
+
+<div class="edge" id="edgeLabel">INTERFACE ENGINE — HL7 · FHIR R4 · DICOM · X12 · NCPDP</div>
+
+<nav class="pill">
+  <a href="#top" style="letter-spacing:.2em"><span class="dot"></span>&nbsp;IE·2</a>
+  <a href="#problem" class="hide-m">PROBLEM</a>
+  <a href="#engine">ENGINE</a>
+  <a href="#compare" class="hide-m">COMPARE</a>
+  <a href="#editions">EDITIONS</a>
+  <a href="#contact" class="cta">TALK TO US &#8599;</a>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero dark" id="top">
+  <div class="wrap">
+    <p class="eyebrow">Interface Engine 2.0 — Healthcare Data Orchestration</p>
+    <h1>Every system.<br>Every format.<br><em>One engine.</em></h1>
+    <p class="hero-sub">The interface engine that receives anything a hospital or clinic runs — HL7 v2, FHIR R4, DICOM, X12, NCPDP, XML, CSV, even Excel — and delivers it as anything else. Self-hosted inside your network, or hosted for you.</p>
+
+    <div class="stream" aria-hidden="true">
+      <div>
+        <div class="col-label">RECEIVED — RAW</div>
+        <pre class="in" id="streamIn"></pre>
+      </div>
+      <div class="arrow">&#8594;</div>
+      <div>
+        <div class="col-label">DELIVERED — TRANSFORMED</div>
+        <pre class="out" id="streamOut"></pre>
+      </div>
+    </div>
+
+    <div class="hero-meta">
+      <span class="scroll-cue">SCROLL &#8595;</span>
+      <span class="tag">ADT · ORU · DFT · SIU — LIVE ABOVE</span>
+      <span class="tag">ONTARIOMD-CERTIFIED EMR CATALOG</span>
+      <span class="tag">CA + US STANDARDS PROFILES</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROBLEM ══ -->
+<section class="light sec" id="problem">
+  <div class="wrap">
+    <p class="eyebrow">The integration tax</p>
+    <h2>Your data isn't the problem. The plumbing is.</h2>
+    <div class="numlist">
+      <div class="numrow">
+        <div class="n">01</div>
+        <div>
+          <h3>Every vendor speaks a different dialect</h3>
+          <p>EPIC speaks HL7 with Z-segments. The lab speaks ORU. The province wants FHIR with CA-Core profiles, the payer wants X12, the specialist's office sends a fax-turned-CSV — and the mental-health program reports to OMHRS on its own schedule.</p>
+        </div>
+      </div>
+      <div class="numrow">
+        <div class="n">02</div>
+        <div>
+          <h3>Legacy engines charge rent on your own data</h3>
+          <p>Interface engines you can't inspect, priced per interface, deployed by consultants, upgradeable only by the vendor. Twenty years of hospital IT says the same thing: the engine must live inside your network, under your keys.</p>
+        </div>
+      </div>
+      <div class="numrow">
+        <div class="n">03</div>
+        <div>
+          <h3>Small clinics get nothing</h3>
+          <p>Community practices on Accuro, TELUS PS Suite, or OSCAR Pro were never the target market for enterprise engines — so nobody gave them one. They get integration by email and spreadsheet, or not at all.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ENGINE ══ -->
+<section class="dark sec" id="engine">
+  <div class="wrap">
+    <p class="eyebrow">How it works</p>
+    <h2 style="color:#fff">One pipeline. Any protocol in, any protocol out.</h2>
+
+    <svg class="pipeline" viewBox="0 0 1160 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Message pipeline diagram">
+      <path class="flow" d="M150 95 H 190"/><path class="flow" d="M360 95 H 400"/><path class="flow" d="M570 95 H 610"/><path class="flow" d="M780 95 H 820"/><path class="flow" d="M990 95 H 1030"/>
+      <g><rect x="20" y="55" width="130" height="80" fill="none" stroke="rgba(255,255,255,.35)"/><text class="step-t" x="35" y="90">RECEIVE</text><text class="step-d" x="35" y="112">MLLP · HTTP(S) · TCP</text><text class="step-d" x="35" y="127">API poller · file</text></g>
+      <g><rect x="230" y="55" width="130" height="80" fill="none" stroke="rgba(255,255,255,.35)"/><text class="step-t" x="245" y="90">PARSE</text><text class="step-d" x="245" y="112">HL7 · FHIR · XML</text><text class="step-d" x="245" y="127">CSV · XLS · X12</text></g>
+      <g><rect x="440" y="55" width="130" height="80" fill="none" stroke="rgba(255,255,255,.35)"/><text class="step-t" x="455" y="90">TRANSFORM</text><text class="step-d" x="455" y="112">sandboxed JS · AI assist</text><text class="step-d" x="455" y="127">terminology mapping</text></g>
+      <g><rect x="650" y="55" width="130" height="80" fill="none" stroke="rgba(255,255,255,.35)"/><text class="step-t" x="665" y="90">VALIDATE</text><text class="step-d" x="665" y="112">US + CA profiles</text><text class="step-d" x="665" y="127">schema · terminology</text></g>
+      <g><rect x="860" y="55" width="130" height="80" fill="none" stroke="rgba(248,71,61,.8)"/><text class="step-t" x="875" y="90" fill="#f8473d">DELIVER</text><text class="step-d" x="875" y="112">HL7 · FHIR · SQL · file</text><text class="step-d" x="875" y="127">PACS · Azure · AWS</text></g>
+      <g><rect x="1030" y="55" width="110" height="80" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.2)" stroke-dasharray="4 4"/><text class="step-t" x="1045" y="90">AUDIT</text><text class="step-d" x="1045" y="112">immutable log</text><text class="step-d" x="1045" y="127">replay · DLQ</text></g>
+    </svg>
+
+    <div class="numlist" style="margin-top:80px">
+      <div class="numrow">
+        <div class="n">04</div>
+        <div>
+          <h3 style="color:#fff">Universal adapters, not vendor lock-in</h3>
+          <p style="color:rgba(255,255,255,.65)">Raw TCP/IP with any framing, ODBC against any DSN through a bridge sidecar, scheduled API polling, Excel workbooks over base64 — if a system can emit or accept bytes, the engine can interface with it. VPN or site-to-site tunnels need zero engine configuration.</p>
+        </div>
+      </div>
+      <div class="numrow">
+        <div class="n">05</div>
+        <div>
+          <h3 style="color:#fff">Imaging, not just messages</h3>
+          <p style="color:rgba(255,255,255,.65)">Modality Worklist SCP, a Storage SCP receiving from modalities, and C-STORE SCU pushing imaging objects to PACS — the DICOM surface that separates enterprise engines from message movers.</p>
+        </div>
+      </div>
+      <div class="numrow">
+        <div class="n">06</div>
+        <div>
+          <h3 style="color:#fff">AI that assists, on your terms</h3>
+          <p style="color:rgba(255,255,255,.65)">Describe a mapping in plain language and get a sandboxed transform script. Bring your own LLM key — including a private Azure OpenAI inside your own cloud tenant — or run on the engine key, metered per tenant. Every generated script is validated; anything unsafe falls back to a deterministic offline synthesizer.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ACCENT BAND ══ -->
+<section class="band">
+  <div class="wrap">
+    <p class="eyebrow">Any to any</p>
+    <h2>HL7 in.<br>FHIR out.<br>X12 if they insist.</h2>
+    <div class="formats">
+      <span>HL7 V2</span><span>FHIR R4</span><span>CDA / CCD</span><span>DICOM</span><span>X12</span><span>NCPDP</span><span>XML</span><span>JSON</span><span>CSV</span><span>XLSX</span><span>SQL</span><span>REST</span>
+    </div>
+    <p>Every parser pairs with every builder. An Excel roster from payroll becomes HL7 ADT; an HL7 ORU becomes a LOINC-coded FHIR Observation; a DICOM modality schedule becomes worklist entries. One transform sandbox, no format is second-class.</p>
+  </div>
+</section>
+
+<!-- ══ COMPARISON ══ -->
+<section class="light sec" id="compare">
+  <div class="wrap">
+    <p class="eyebrow">Capability matrix</p>
+    <h2>What the incumbents leave out.</h2>
+    <table class="matrix">
+      <thead>
+        <tr><th>Capability</th><th class="us-col">Interface Engine 2.0</th><th class="hide-m">Iguana</th><th class="hide-m">Cloverleaf</th><th class="hide-m">Rhapsody</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>HL7 v2 (MLLP) in/out</td><td class="us-col yes">YES</td><td class="yes">YES</td><td class="yes">YES</td><td class="yes">YES</td></tr>
+        <tr><td>FHIR R4 facade + SMART on FHIR gateway</td><td class="us-col yes">YES</td><td class="yes">YES</td><td class="yes">YES</td><td class="yes">YES</td></tr>
+        <tr><td>Canadian profiles — CA-Core, CIHI, Ontario</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><td>Mental-health submissions — OMHRS / MHA PDS rehearsal</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><td>OntarioMD EMR connectors — Accuro, TELUS, OSCAR Pro, Ocean</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><td>DICOM MWL SCP + Storage SCP + C-STORE SCU</td><td class="us-col yes">YES</td><td class="no">—</td><td class="yes">YES*</td><td class="yes">YES*</td></tr>
+        <tr><td>Universal adapters — raw TCP, ODBC, API polling, Excel</td><td class="us-col yes">YES</td><td class="yes">PARTIAL</td><td class="yes">PARTIAL</td><td class="yes">PARTIAL</td></tr>
+        <tr><td>Self-contained Docker bundle — installs offline, no JVM sprawl</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><td>SaaS multi-tenant + outbound-only site agent</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><td>AI transform assist — BYOK LLM + offline fallback</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><td>Single-seat clinic edition — running in 10 minutes</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+      </tbody>
+    </table>
+    <p class="legend">* Varies by site licensing and partner modules. Matrix reflects generally published capabilities; we will happily be corrected.</p>
+  </div>
+</section>
+
+<!-- ══ EDITIONS ══ -->
+<section class="dark sec" id="editions">
+  <div class="wrap">
+    <p class="eyebrow">Three editions. One engine.</p>
+    <h2 style="color:#fff">Deployed your way.</h2>
+    <div class="tiers">
+      <div class="tier">
+        <div><h3>Hospital</h3><div class="who">SELF-HOSTED · FLAGSHIP</div></div>
+        <div>
+          <p>The full engine inside your network: EPIC-to-everything domains, DICOM imaging, provincial submissions, Postgres HA. Ships as a self-contained Docker bundle your team installs offline — PHI never leaves the building at install time.</p>
+          <ul>
+            <li>EPIC / Oracle Health / MEDITECH / Paragon profiles</li>
+            <li>ClinicalConnect, OLIS, DHDR, HRM Ontario feeds</li>
+            <li>Active-active HA + immutable audit trail</li>
+          </ul>
+        </div>
+        <a class="action" href="#contact">REQUEST BUNDLE &#8599;</a>
+      </div>
+      <div class="tier">
+        <div><h3>Clinic</h3><div class="who">SELF-HOSTED · VOLUME</div></div>
+        <div>
+          <p>One container, one gigabyte, ten minutes. Pre-seeded for OntarioMD-certified EMRs — Accuro, TELUS PS Suite, OSCAR Pro, Ocean — and working against the outbox from minute one. The edition small practices were never offered.</p>
+          <ul>
+            <li>EMR hub, OLIS labs, Ocean referrals, OMHRS rehearsal</li>
+            <li>Outbox-not-fail: live before endpoints are configured</li>
+            <li>Upgrades to Hospital in place, same data volume</li>
+          </ul>
+        </div>
+        <a class="action" href="#contact">START A PILOT &#8599;</a>
+      </div>
+      <div class="tier">
+        <div><h3>Hosted</h3><div class="who">SAAS · NO-IT CLINICS</div></div>
+        <div>
+          <p>We run the engine; your data stays tenant-isolated under your API key. A tiny outbound-only agent at your site reaches internal systems with zero firewall changes. Bring your own LLM key, or use ours — metered, per tenant.</p>
+          <ul>
+            <li>Provision a tenant in one action, revoke instantly</li>
+            <li>Outbound-only site agent for in-network DSNs</li>
+            <li>Same engine, same routes — migrate anytime</li>
+          </ul>
+        </div>
+        <a class="action" href="#contact">GET A TENANT &#8599;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER / CONTACT ══ -->
+<footer id="contact">
+  <div class="wrap">
+    <p class="eyebrow">Contact</p>
+    <h2>Put us between<br>your systems.</h2>
+    <div class="contact">
+      <a href="mailto:contact@healthtrustiq.com">contact@healthtrustiq.com</a>
+      <a href="#">demo.interfaceengine.health &#8599;</a>
+      <a href="#">Live capability demo — request access &#8599;</a>
+    </div>
+    <hr class="foot-rule">
+    <div class="foot-small">
+      <span>© 2026 INTERFACEENGINE.HEALTH — HEALTHTRUST IQ</span>
+      <span>HL7 · FHIR R4 · DICOM · X12 · NCPDP</span>
+      <span>CANADA + US</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Hero stream: raw HL7 in → transformed FHIR out, typed character by character.
+  var frames = [
+    {
+      inStr: 'MSH|^~\\&|ACCURO|CLINIC|ENGINE|HUB|202610010900||ADT^A01|A001|P|2.5\nPID|1||CLN999^^^CLINIC^MR||DOE^JANE||19800101|F',
+      outStr: '{\n  "resourceType": "Patient",\n  "id": "CLN999",\n  "name": [{ "family": "DOE", "given": ["JANE"] }],\n  "gender": "female",\n  "birthDate": "1980-01-01"\n}'
+    },
+    {
+      inStr: 'MSH|^~\\&|OLIS|LAB|ENGINE|HUB|202610010901||ORU^R01|L002|P|2.5\nOBR|1|ORD9||2339-0^Glucose^LN|||20261001\nOBX|1|NM|2339-0^Glucose^LN||5.5|mmol/L',
+      outStr: '{\n  "resourceType": "Observation",\n  "status": "final",\n  "code": { "coding": [{ "system": "http://loinc.org", "code": "2339-0" }] },\n  "valueString": "5.5 mmol/L"\n}'
+    },
+    {
+      inStr: 'MSH|^~\\&|BILLING|HOSP|ENGINE|HUB|202610010902||DFT^P03|B003|P|2.5\nFT1|1||20261001|20261001|CG|99213^OFFICE VISIT^CPT||1|EACH|150.00',
+      outStr: 'ISA*00*          *00*          *ZZ*ENGINE\n  *ZZ*PAYER        *261001*0902*^*00501*\nGS*HC*ENGINE*PAYER*20261001*\nST*837*0001*005010X222A1',
+      x12: true
+    }
+  ];
+  var inEl = document.getElementById('streamIn');
+  var outEl = document.getElementById('streamOut');
+  var frame = 0;
+
+  function typeInto(el, text, speed, done) {
+    el.innerHTML = '';
+    var i = 0;
+    var cur = document.createElement('span');
+    cur.className = 'cursor';
+    el.appendChild(cur);
+    function tick() {
+      var step = 3;
+      var n = Math.min(i + step, text.length);
+      el.innerHTML = text.slice(0, n).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+      i = n;
+      if (i < text.length) {
+        cur && el.appendChild(cur);
+        setTimeout(tick, speed);
+      } else {
+        if (cur.parentNode) cur.parentNode.removeChild(cur);
+        done && done();
+      }
+    }
+    tick();
+  }
+
+  function play() {
+    var f = frames[frame % frames.length];
+    typeInto(inEl, f.inStr, 14, function () {
+      typeInto(outEl, f.outStr, 10, function () {
+        setTimeout(function () {
+          frame++;
+          play();
+        }, 2600);
+      });
+    });
+  }
+  play();
+
+  // Edge label inverts over light/accent sections
+  var edge = document.getElementById('edgeLabel');
+  var lit = Array.prototype.slice.call(document.querySelectorAll('.light, .band'));
+  function updateEdge() {
+    var mid = window.innerHeight / 2;
+    var onLight = lit.some(function (s) {
+      var r = s.getBoundingClientRect();
+      return r.top <= mid && r.bottom >= mid;
+    });
+    edge.className = onLight ? 'edge light' : 'edge';
+  }
+  window.addEventListener('scroll', updateEdge, { passive: true });
+  updateEdge();
+})();
+</script>
+</body>
+</html>
