@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Interface Engine — Every system. Every format. One engine.</title>
 <meta name="description" content="Healthcare interface engine: HL7 v2, FHIR R4, DICOM, X12, NCPDP and any format in — any format out. Self-hosted Docker bundle, clinic edition, or hosted SaaS with an outbound-only site agent.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://interfaceengine.health/">
+<meta property="og:title" content="Interface Engine — Every system. Every format. One engine.">
+<meta property="og:description" content="The healthcare interface engine that receives anything — HL7, FHIR, DICOM, X12 — and delivers it as anything else. Self-hosted. Canadian + US standards. Runs without us.">
+<meta property="og:image" content="https://interfaceengine.health/demo-tour-poster.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Interface Engine — Every system. Every format. One engine.">
+<meta name="twitter:description" content="HL7, FHIR, DICOM, X12 — any format in, any format out. Self-hosted inside your network. Canada + US standards profiles.">
+<meta name="twitter:image" content="https://interfaceengine.health/demo-tour-poster.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23f8473d'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -149,6 +159,29 @@
   .tier .action { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; color: var(--paper); text-decoration: underline; text-underline-offset: 4px; white-space: nowrap; }
   .tier .action:hover { text-decoration: none; opacity: .6; }
   @media (max-width: 860px) { .tier { grid-template-columns: 1fr; gap: 14px; } }
+
+  /* ── trust band ──────────────────────────────────────── */
+  .trust-stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--hair-dark); margin-top: 20px; }
+  .trust-stat { padding: 40px 30px 44px 0; border-bottom: 1px solid var(--hair-dark); }
+  .trust-stat + .trust-stat { padding-left: 30px; border-left: 1px solid var(--hair-dark); }
+  .trust-stat .v { font-family: var(--mono); font-size: clamp(28px, 3vw, 44px); color: var(--paper); letter-spacing: -.02em; }
+  .trust-stat .v em { font-style: normal; color: var(--accent); }
+  .trust-stat .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .2em; color: rgba(255,255,255,.45); margin-top: 10px; text-transform: uppercase; }
+  @media (max-width: 860px) { .trust-stats { grid-template-columns: 1fr 1fr; } .trust-stat + .trust-stat { border-left: none; padding-left: 0; } .trust-stat:nth-child(even) { padding-left: 30px; border-left: 1px solid var(--hair-dark); } }
+
+  /* ── faq ─────────────────────────────────────────────── */
+  .faq { border-top: 1px solid var(--hair-light); margin-top: 8px; }
+  .faq details { border-bottom: 1px solid var(--hair-light); }
+  .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding: 26px 0; font-size: 19px; font-weight: 500; letter-spacing: -.01em; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; font-family: var(--mono); color: var(--accent); font-size: 20px; transition: transform .2s ease; }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { max-width: 720px; color: #3d3d3d; padding: 0 0 28px; }
+
+  /* ── scroll reveal ───────────────────────────────────── */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease-out, transform .7s ease-out; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
   /* ── tour video ──────────────────────────────────────── */
   .tour-figure { margin-top: 8px; border: 1px solid var(--hair-light); background: #0b0f14; }
@@ -340,6 +373,22 @@
   </div>
 </section>
 
+<!-- ══ TRUST ══ -->
+<section class="dark sec" id="trust" style="border-top:1px dashed var(--hair-dark)">
+  <div class="wrap">
+    <p class="eyebrow">Why we exist</p>
+    <h2 style="color:#fff">Built by the people who<br>maintained the engines.</h2>
+    <p style="max-width:660px;color:rgba(255,255,255,.72);margin-top:-34px;margin-bottom:54px">Two decades of hospital integration teaches you one thing: interface engines fail on vendor dependence, not technology. This engine was designed backwards from that lesson — it runs inside your network, under your keys, and keeps running whether or not we do.</p>
+    <div class="trust-stats">
+      <div class="trust-stat"><div class="v">20<em>+</em></div><div class="k">Years in healthcare integration</div></div>
+      <div class="trust-stat"><div class="v">0</div><div class="k">Phone-home calls. Ever.</div></div>
+      <div class="trust-stat"><div class="v">CA <em>+</em> US</div><div class="k">Standards profiles, in one engine</div></div>
+      <div class="trust-stat"><div class="v">Source</div><div class="k">Available to customers for review</div></div>
+    </div>
+    <p style="margin-top:44px;max-width:660px;color:rgba(255,255,255,.6);font-size:14.5px">PHIPA-conscious by architecture: PHI stays on your infrastructure, the audit trail is immutable, and the only outbound connections are the ones your team configures. Security review welcome — we'd rather be inspected than trusted.</p>
+  </div>
+</section>
+
 <!-- ══ EDITIONS ══ -->
 <section class="dark sec" id="editions">
   <div class="wrap">
@@ -404,6 +453,40 @@
   </div>
 </section>
 
+<!-- ══ FAQ ══ -->
+<section class="light sec" id="faq">
+  <div class="wrap">
+    <p class="eyebrow">Straight answers</p>
+    <h2>What hospital IT asks us.</h2>
+    <div class="faq">
+      <details>
+        <summary>Does the engine need internet access?</summary>
+        <p>No. It installs and runs fully inside your network, including the first install. The only outbound connections it ever makes are the destinations your team configures — your EHR endpoints, your lab feeds, your own mail server for alerts. There is no license server and no telemetry.</p>
+      </details>
+      <details>
+        <summary>Where does our data go?</summary>
+        <p>Nowhere you don't put it. Messages are stored on your volume, the audit trail is a local append-only log, and imaging lands in your PACS. For Ontario deployments that means PHI never leaves your custodianship — a PHIPA conversation becomes a short one.</p>
+      </details>
+      <details>
+        <summary>What happens if HealthTrust IQ disappears?</summary>
+        <p>The engine keeps running — that's the architectural point. No activation, no renewal check, no kill switch. Customers additionally receive source-code access for continuity review, so your team is never held hostage by our balance sheet.</p>
+      </details>
+      <details>
+        <summary>Does it really cover EPIC, MEDITECH, and the Ontario EMRs?</summary>
+        <p>Yes — with named, maintained adaptor profiles rather than generic promises: EPIC ADT/ORU/SIU inbound, MEDITECH Expanse, and the OntarioMD-certified clinic EMRs (Accuro, TELUS PS Suite, OSCAR Pro, Ocean). Anything with an API, a database, or a file drop can be interfaced through the universal adapters.</p>
+      </details>
+      <details>
+        <summary>How is it licensed?</summary>
+        <p>Annual subscription per deployment (or perpetual with maintenance), priced by edition — Hospital, Clinic, or Hosted. Source is available to customers for security and continuity review. No per-interface pricing: an engine that charges rent per interface is the disease, not the cure.</p>
+      </details>
+      <details>
+        <summary>Can we try it before we buy?</summary>
+        <p>Yes — request the bundle and we'll provision access to the private distribution channel, typically the same day. Most teams have it processing test messages inside an hour; a pilot against a real interface follows whenever you're ready.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
 <!-- ══ REQUEST ACCESS ══ -->
 <section class="dark sec access-sec" id="access">
   <div class="wrap">
@@ -438,7 +521,7 @@
     <h2>Put us between<br>your systems.</h2>
     <div class="contact">
       <a href="mailto:contact@healthtrustiq.com">contact@healthtrustiq.com</a>
-      <a href="#">demo.interfaceengine.health &#8599;</a>
+      <a href="#tour">Demo-tour video — watch it run &#8599;</a>
       <a href="#access">Live capability demo — request access &#8599;</a>
     </div>
     <hr class="foot-rule">
@@ -520,6 +603,18 @@
   }
   window.addEventListener('scroll', updateEdge, { passive: true });
   updateEdge();
+
+  // Scroll-reveal: fade each section's inner wrap in as it enters the viewport.
+  var wraps = document.querySelectorAll('.sec > .wrap, footer > .wrap');
+  if ('IntersectionObserver' in window) {
+    wraps.forEach(function (w) { w.classList.add('reveal'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    wraps.forEach(function (w) { io.observe(w); });
+  }
 })();
 </script>
 </body>
