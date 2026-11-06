@@ -227,6 +227,7 @@
   <a href="#top" style="letter-spacing:.2em"><span class="dot"></span>&nbsp;IE·2</a>
   <a href="#problem" class="hide-m">PROBLEM</a>
   <a href="#engine">ENGINE</a>
+  <a href="#accelerator">ACCELERATOR</a>
   <a href="#compare" class="hide-m">COMPARE</a>
   <a href="#tour" class="hide-m">TOUR</a>
   <a href="#editions">EDITIONS</a>
@@ -346,6 +347,45 @@
   </div>
 </section>
 
+<!-- ══ CANADA CONFORMANCE ACCELERATOR ══ -->
+<section class="light sec" id="accelerator" style="border-top:1px solid var(--hair-light)">
+  <div class="wrap">
+    <p class="eyebrow">Canada Conformance Accelerator</p>
+    <h2>Prove readiness.<br>Before onboarding.</h2>
+    <p style="max-width:700px;color:#3d3d3d;margin-top:-34px;margin-bottom:54px">Run repeatable structural-readiness checks against isolated synthetic Canadian healthcare fixtures. Export non-PHI JSON evidence for engineering review and CI/CD gates — without sending patient data to an external service.</p>
+    <div class="numlist">
+      <div class="numrow">
+        <div class="n">01</div>
+        <div>
+          <h3>Versioned, fingerprinted packs</h3>
+          <p>Seven versioned packs make every readiness run reproducible, including a nine-check complete Canadian suite. Pack identity and fingerprints travel with the result, so your team knows exactly what was evaluated.</p>
+        </div>
+      </div>
+      <div class="numrow">
+        <div class="n">02</div>
+        <div>
+          <h3>A repeatable CI/CD quality gate</h3>
+          <p>Run a pack from the console or through the HTTP interface. Successful runs return HTTP 200; structural-readiness failures return HTTP 422, making conformance work an enforceable deployment check instead of a spreadsheet exercise.</p>
+        </div>
+      </div>
+      <div class="numrow">
+        <div class="n">03</div>
+        <div>
+          <h3>Run history and drift reporting</h3>
+          <p>Persistent, tenant-separated run history shows what changed between evaluations. Compare results over time, identify regressions, and give integration teams a shared operational record.</p>
+        </div>
+      </div>
+      <div class="numrow">
+        <div class="n">04</div>
+        <div>
+          <h3>Evidence your team can take with them</h3>
+          <p>Download non-PHI JSON evidence for reviews, handoffs, and release records. The accelerator demonstrates structural readiness; it does not confer official certification or replace external authority onboarding and validation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══ COMPARISON ══ -->
 <section class="light sec" id="compare">
   <div class="wrap">
@@ -359,6 +399,7 @@
         <tr><td>HL7 v2 (MLLP) in/out</td><td class="us-col yes">YES</td><td class="yes">YES</td><td class="yes">YES</td><td class="yes">YES</td></tr>
         <tr><td>FHIR R4 facade + SMART on FHIR gateway</td><td class="us-col yes">YES</td><td class="yes">YES</td><td class="yes">YES</td><td class="yes">YES</td></tr>
         <tr><td>Canadian profiles — CA-Core, CIHI, Ontario</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><td>Canada Conformance Accelerator — packs, CI gate + evidence</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
         <tr><td>Mental-health submissions — OMHRS / MHA PDS rehearsal</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
         <tr><td>OntarioMD EMR connectors — Accuro, TELUS, OSCAR Pro, Ocean</td><td class="us-col yes">YES</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
         <tr><td>DICOM MWL SCP + Storage SCP + C-STORE SCU</td><td class="us-col yes">YES</td><td class="no">—</td><td class="yes">YES*</td><td class="yes">YES*</td></tr>
@@ -398,11 +439,12 @@
       <div class="tier">
         <div><h3>Hospital</h3><div class="who">SELF-HOSTED · FLAGSHIP</div></div>
         <div>
-          <p>The full engine inside your network: EPIC-to-everything domains, DICOM imaging, provincial submissions, Postgres HA. Ships as a self-contained Docker bundle your team installs offline — PHI never leaves the building at install time.</p>
+          <p>The full engine inside your network: EPIC-to-everything domains, DICOM imaging, provincial submissions, PostgreSQL state mirroring, and the Canada Conformance Accelerator. Ships as a self-contained Docker bundle your team installs offline — PHI never leaves the building at install time.</p>
           <ul>
             <li>EPIC / Oracle Health / MEDITECH / Paragon profiles</li>
             <li>ClinicalConnect, OLIS, DHDR, HRM Ontario feeds</li>
-            <li>Active-active HA + immutable audit trail</li>
+            <li>Versioned readiness packs + non-PHI evidence export</li>
+            <li>PostgreSQL state mirror + immutable audit trail</li>
           </ul>
         </div>
         <a class="action" href="#access">REQUEST BUNDLE &#8599;</a>
@@ -474,6 +516,10 @@
       <details>
         <summary>Does it really cover EPIC, MEDITECH, and the Ontario EMRs?</summary>
         <p>Yes — with named, maintained adaptor profiles rather than generic promises: EPIC ADT/ORU/SIU inbound, MEDITECH Expanse, and the OntarioMD-certified clinic EMRs (Accuro, TELUS PS Suite, OSCAR Pro, Ocean). Anything with an API, a database, or a file drop can be interfaced through the universal adapters.</p>
+      </details>
+      <details>
+        <summary>Is the Canada Conformance Accelerator an official certification?</summary>
+        <p>No. It produces repeatable structural-readiness results and non-PHI evidence using versioned packs and synthetic fixtures. It does not confer certification, connect to an official validator, or replace onboarding and validation with the relevant external authority. It helps your team find and fix structural issues before those external steps.</p>
       </details>
       <details>
         <summary>How is it licensed?</summary>
