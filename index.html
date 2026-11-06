@@ -218,10 +218,130 @@
   footer .contact a:hover { text-decoration: none; opacity: .55; }
   .foot-rule { border: none; border-top: 1px solid var(--hair-dark); margin: 90px 0 26px; position: relative; }
   .foot-small { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; color: rgba(255,255,255,.4); position: relative; }
+
+  /* ── interactive visual system ───────────────────────── */
+  .scroll-progress { position: fixed; z-index: 100; top: 0; left: 0; width: 0; height: 3px; background: var(--accent); pointer-events: none; }
+  .pill { transition: background .25s ease, border-color .25s ease; }
+  .pill.on-light { background: var(--paper); border-color: var(--hair-light); }
+  .pill.on-light a { color: var(--ink); }
+  .pill.on-light a.cta { color: var(--paper); background: var(--ink); }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+
+  .hero { justify-content: flex-start; padding-top: 148px; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.16fr) minmax(360px, .84fr); gap: 64px; align-items: center; }
+  .hero h1 { font-size: clamp(54px, 6.85vw, 108px); margin: 24px 0 30px; }
+  .hero-sub { font-size: 18px; }
+  .hero-meta { margin-top: 32px; gap: 20px 28px; }
+
+  .observatory { border: 1px solid rgba(255,255,255,.22); background: #050505; min-width: 0; }
+  .observatory-head, .observatory-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 16px; font-family: var(--mono); font-size: 9px; letter-spacing: .16em; color: rgba(255,255,255,.48); }
+  .observatory-head { border-bottom: 1px solid var(--hair-dark); }
+  .observatory-foot { border-top: 1px solid var(--hair-dark); color: rgba(255,255,255,.68); }
+  .observatory-foot span:last-child { color: var(--accent); white-space: nowrap; }
+  .live-status { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+  .live-status i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: statusPulse 2s ease-in-out infinite; }
+  .scenario-switch { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--hair-dark); }
+  .scenario-switch button { appearance: none; border: 0; border-right: 1px solid var(--hair-dark); border-bottom: 2px solid transparent; background: transparent; color: rgba(255,255,255,.46); padding: 13px 6px 11px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; cursor: pointer; transition: color .2s ease, background .2s ease, border-color .2s ease; }
+  .scenario-switch button:last-child { border-right: 0; }
+  .scenario-switch button:hover { color: var(--paper); background: rgba(255,255,255,.04); }
+  .scenario-switch button.active { color: var(--paper); border-bottom-color: var(--accent); background: rgba(248,71,61,.06); }
+  .topology { display: block; width: 100%; height: auto; }
+  .topology text { font-family: var(--mono); }
+  .topology .watermark { fill: rgba(255,255,255,.028); font-family: var(--sans); font-size: 156px; font-weight: 600; letter-spacing: -.08em; }
+  .topo-base { fill: none; stroke: rgba(255,255,255,.13); stroke-width: 1; }
+  .topo-route { fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 7 8; opacity: 0; }
+  .topo-route.active { opacity: 1; animation: routeFlow 1.1s linear infinite; }
+  .topo-node rect { fill: #080808; stroke: rgba(255,255,255,.26); stroke-width: 1; }
+  .topo-node.scenario-source rect, .topo-node.scenario-dest rect { stroke: var(--accent); }
+  .topo-node .node-label { fill: var(--paper); font-size: 11px; letter-spacing: .08em; }
+  .topo-node .node-kicker { fill: rgba(255,255,255,.38); font-size: 7.5px; letter-spacing: .18em; }
+  .topo-node .node-port { fill: var(--accent); }
+  .core-ring { fill: #050505; stroke: rgba(255,255,255,.32); stroke-width: 1; }
+  .core-ring.dashed { fill: none; stroke: var(--accent); stroke-dasharray: 3 8; transform-origin: 260px 195px; animation: coreRotate 18s linear infinite; }
+  .core-pulse { fill: none; stroke: var(--accent); stroke-width: 1; animation: corePulse 2.4s ease-out infinite; transform-origin: 260px 195px; }
+  .core-label { fill: var(--paper); font-size: 18px; font-weight: 500; text-anchor: middle; }
+  .core-sub { fill: rgba(255,255,255,.42); font-size: 7.5px; letter-spacing: .18em; text-anchor: middle; }
+  .topo-caption { fill: rgba(255,255,255,.3); font-size: 7.5px; letter-spacing: .16em; }
+
+  .stream { margin-top: 54px; border: 1px solid var(--hair-dark); padding: 24px; background: #050505; }
+  .stream pre { min-height: 190px; }
+  .stream .arrow { font-size: 26px; }
+
+  .band { position: relative; overflow: hidden; }
+  .band::after { content: 'ANY / ANY'; position: absolute; right: -2vw; bottom: -5vw; font-size: clamp(100px, 18vw, 280px); line-height: .8; font-weight: 600; letter-spacing: -.07em; color: rgba(0,0,0,.065); pointer-events: none; white-space: nowrap; }
+  .band .wrap { position: relative; z-index: 1; }
+
+  .accelerator-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(390px, .82fr); gap: 74px; align-items: center; margin-bottom: 70px; }
+  .accelerator-grid h2 { margin-bottom: 30px; }
+  .accelerator-lede { max-width: 620px; color: #3d3d3d; }
+  .evidence-console { background: #080808; color: var(--paper); border: 1px solid #080808; }
+  .evidence-head, .evidence-foot { display: flex; justify-content: space-between; gap: 14px; padding: 14px 16px; font-family: var(--mono); font-size: 9px; letter-spacing: .13em; color: rgba(255,255,255,.48); }
+  .evidence-head { border-bottom: 1px solid var(--hair-dark); }
+  .evidence-head span:last-child { color: var(--accent); }
+  .evidence-foot { border-top: 1px solid var(--hair-dark); flex-wrap: wrap; }
+  .evidence-foot strong { color: #7ee0a3; font-weight: 400; }
+  .evidence-main { display: grid; grid-template-columns: 140px 1fr; gap: 22px; align-items: center; padding: 26px 24px; }
+  .readiness-ring { width: 132px; height: 132px; }
+  .readiness-ring .track { fill: none; stroke: rgba(255,255,255,.12); stroke-width: 3; }
+  .readiness-ring .value { fill: none; stroke: var(--accent); stroke-width: 3; stroke-dasharray: 289.03; stroke-dashoffset: 0; }
+  .readiness-ring text { fill: var(--paper); font-family: var(--sans); text-anchor: middle; }
+  .readiness-ring .score { font-size: 26px; font-weight: 600; }
+  .readiness-ring .label { font-family: var(--mono); font-size: 7px; letter-spacing: .14em; fill: rgba(255,255,255,.45); }
+  .run-meta { font-family: var(--mono); font-size: 10px; }
+  .run-meta div { display: grid; grid-template-columns: 78px 1fr; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--hair-dark); }
+  .run-meta div:last-child { border-bottom: 0; }
+  .run-meta dt { color: rgba(255,255,255,.38); }
+  .run-meta dd { color: rgba(255,255,255,.82); overflow-wrap: anywhere; }
+  .evidence-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; padding: 0 24px 22px; }
+  .evidence-check { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid var(--hair-dark); font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,.55); }
+  .evidence-check b { color: #7ee0a3; font-weight: 400; }
+  .sample-note { padding: 0 24px 18px; font-family: var(--mono); font-size: 8px; letter-spacing: .14em; color: rgba(255,255,255,.3); }
+
+  .matrix tbody tr { transition: background .18s ease; }
+  .matrix tbody tr:hover { background: rgba(0,0,0,.035); }
+  .tier h3 { transition: color .2s ease; }
+  .tier:hover h3 { color: var(--accent); }
+
+  @keyframes routeFlow { to { stroke-dashoffset: -15; } }
+  @keyframes coreRotate { to { transform: rotate(360deg); } }
+  @keyframes corePulse { 0% { transform: scale(.82); opacity: .7; } 100% { transform: scale(1.35); opacity: 0; } }
+  @keyframes statusPulse { 50% { opacity: .35; } }
+
+  @media (max-width: 1040px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 52px; }
+    .hero h1 { font-size: clamp(58px, 10vw, 108px); }
+    .observatory { max-width: 720px; }
+    .accelerator-grid { grid-template-columns: 1fr; gap: 46px; }
+    .evidence-console { max-width: 680px; }
+  }
+  @media (max-width: 760px) {
+    .hero { padding-top: 118px; padding-bottom: 48px; }
+    .hero h1 { font-size: clamp(47px, 13.3vw, 72px); }
+    .hero-sub { font-size: 16px; }
+    .hero-grid { gap: 44px; }
+    .hero-meta { gap: 14px 20px; }
+    .observatory-head, .observatory-foot { padding: 12px; font-size: 8px; }
+    .scenario-switch button { font-size: 8.5px; padding: 12px 3px 10px; }
+    .stream { margin-top: 40px; padding: 18px; }
+    .stream pre { min-height: 176px; font-size: 11px; }
+    .band::after { display: none; }
+    .accelerator-grid { margin-bottom: 50px; }
+    .evidence-main { grid-template-columns: 112px 1fr; gap: 14px; padding: 22px 16px; }
+    .readiness-ring { width: 108px; height: 108px; }
+    .run-meta { font-size: 8.5px; }
+    .run-meta div { grid-template-columns: 62px 1fr; gap: 7px; }
+    .evidence-checks { grid-template-columns: 1fr; padding: 0 16px 18px; }
+    .sample-note { padding: 0 16px 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .topo-route.active, .core-ring.dashed, .core-pulse, .live-status i, .pipeline .flow { animation: none; }
+  }
 </style>
 </head>
 <body>
 
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 <div class="edge" id="edgeLabel">INTERFACE ENGINE — HL7 · FHIR R4 · DICOM · X12 · NCPDP</div>
 
 <nav class="pill">
@@ -238,9 +358,80 @@
 <!-- ══ HERO ══ -->
 <section class="hero dark" id="top">
   <div class="wrap">
-    <p class="eyebrow">Interface Engine 2.0 — Healthcare Data Orchestration</p>
-    <h1>Every system.<br>Every format.<br><em>One engine.</em></h1>
-    <p class="hero-sub">The interface engine that receives anything a hospital or clinic runs — HL7 v2, FHIR R4, DICOM, X12, NCPDP, XML, CSV, even Excel — and delivers it as anything else. Self-hosted inside your network, or hosted for you.</p>
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Interface Engine 2.0 — Healthcare Data Orchestration</p>
+        <h1>Every system.<br>Every format.<br><em>One engine.</em></h1>
+        <p class="hero-sub">The interface engine that receives anything a hospital or clinic runs — HL7 v2, FHIR R4, DICOM, X12, NCPDP, XML, CSV, even Excel — and delivers it as anything else. Self-hosted inside your network, or hosted for you.</p>
+      </div>
+
+      <div class="observatory">
+        <div class="observatory-head">
+          <span>MESSAGE TOPOLOGY / 01</span>
+          <span class="live-status"><i></i> SYNTHETIC DEMO</span>
+        </div>
+        <div class="scenario-switch" role="group" aria-label="Choose a message transformation scenario">
+          <button type="button" class="active" data-scenario-button="0" aria-pressed="true">ADT → FHIR</button>
+          <button type="button" data-scenario-button="1" aria-pressed="false">ORU → FHIR</button>
+          <button type="button" data-scenario-button="2" aria-pressed="false">DFT → X12</button>
+        </div>
+        <svg class="topology" id="topology" viewBox="0 0 520 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="topologyTitle topologyDesc">
+          <title id="topologyTitle">Interactive healthcare message topology</title>
+          <desc id="topologyDesc">A synthetic message moves from a source system through Interface Engine to a transformed destination.</desc>
+          <defs>
+            <pattern id="topoGrid" width="26" height="26" patternUnits="userSpaceOnUse">
+              <path d="M26 0H0V26" fill="none" stroke="rgba(255,255,255,.045)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="520" height="390" fill="url(#topoGrid)"/>
+          <text class="watermark" x="258" y="252" text-anchor="middle">02</text>
+          <path class="topo-base" d="M118 85H172C205 85 190 195 225 195H295C330 195 315 85 348 85H402"/>
+          <path class="topo-base" d="M118 310H172C205 310 190 195 225 195M295 195C330 195 315 310 348 310H402"/>
+          <path class="topo-route active" data-scenario-path="0" d="M118 85H172C205 85 190 195 225 195H295C330 195 315 85 348 85H402"/>
+          <path class="topo-route" data-scenario-path="1" d="M118 85H164C212 85 178 195 225 195H295C342 195 308 85 356 85H402"/>
+          <path class="topo-route" data-scenario-path="2" d="M118 85H180C210 85 185 195 225 195H295C335 195 310 85 340 85H402"/>
+
+          <g class="topo-node scenario-source" transform="translate(42 52)">
+            <rect width="76" height="66"/>
+            <circle class="node-port" cx="76" cy="33" r="3"/>
+            <text class="node-kicker" x="10" y="18">SOURCE / MLLP</text>
+            <text class="node-label" id="sourceLabel" x="10" y="42">EPIC ADT</text>
+          </g>
+          <g class="topo-node scenario-dest" transform="translate(402 52)">
+            <rect width="76" height="66"/>
+            <circle class="node-port" cx="0" cy="33" r="3"/>
+            <text class="node-kicker" x="10" y="18">DEST / API</text>
+            <text class="node-label" id="destLabel" x="10" y="42">FHIR R4</text>
+          </g>
+          <g class="topo-node" transform="translate(42 277)">
+            <rect width="76" height="66"/>
+            <circle class="node-port" cx="76" cy="33" r="3"/>
+            <text class="node-kicker" x="10" y="18">IMAGING</text>
+            <text class="node-label" x="10" y="42">PACS</text>
+          </g>
+          <g class="topo-node" transform="translate(402 277)">
+            <rect width="76" height="66"/>
+            <circle class="node-port" cx="0" cy="33" r="3"/>
+            <text class="node-kicker" x="10" y="18">DOWNSTREAM</text>
+            <text class="node-label" x="10" y="42">EMR HUB</text>
+          </g>
+
+          <circle class="core-pulse" cx="260" cy="195" r="51"/>
+          <circle class="core-ring dashed" cx="260" cy="195" r="58"/>
+          <circle class="core-ring" cx="260" cy="195" r="45"/>
+          <circle cx="260" cy="166" r="4" fill="#f8473d"/>
+          <text class="core-label" x="260" y="197">IE·2</text>
+          <text class="core-sub" x="260" y="214">ROUTE / AUDIT</text>
+          <text class="topo-caption" x="42" y="370">RECEIVE</text>
+          <text class="topo-caption" x="224" y="370">TRANSFORM + VALIDATE</text>
+          <text class="topo-caption" x="427" y="370">DELIVER</text>
+        </svg>
+        <div class="observatory-foot">
+          <span id="routeName">ADT A01 → FHIR PATIENT</span>
+          <span>TRACE READY</span>
+        </div>
+      </div>
+    </div>
 
     <div class="stream" aria-hidden="true">
       <div>
@@ -256,7 +447,7 @@
 
     <div class="hero-meta">
       <span class="scroll-cue">SCROLL &#8595;</span>
-      <span class="tag">ADT · ORU · DFT · SIU — LIVE ABOVE</span>
+      <span class="tag">ADT · ORU · DFT · SIU — SYNTHETIC DEMO</span>
       <span class="tag">ONTARIOMD-CERTIFIED EMR CATALOG</span>
       <span class="tag">CA + US STANDARDS PROFILES</span>
     </div>
@@ -351,9 +542,38 @@
 <!-- ══ CANADA CONFORMANCE ACCELERATOR ══ -->
 <section class="light sec" id="accelerator" style="border-top:1px solid var(--hair-light)">
   <div class="wrap">
-    <p class="eyebrow">Canada Conformance Accelerator</p>
-    <h2>Prove readiness.<br>Before onboarding.</h2>
-    <p style="max-width:700px;color:#3d3d3d;margin-top:-34px;margin-bottom:54px">Run repeatable structural-readiness checks against isolated synthetic Canadian healthcare fixtures. Export non-PHI JSON evidence for engineering review and CI/CD gates — without sending patient data to an external service.</p>
+    <div class="accelerator-grid">
+      <div>
+        <p class="eyebrow">Canada Conformance Accelerator</p>
+        <h2>Prove readiness.<br>Before onboarding.</h2>
+        <p class="accelerator-lede">Run repeatable structural-readiness checks against isolated synthetic Canadian healthcare fixtures. Export non-PHI JSON evidence for engineering review and CI/CD gates — without sending patient data to an external service.</p>
+      </div>
+      <div class="evidence-console">
+        <div class="evidence-head"><span>EVIDENCE RUN / CA-COMPLETE</span><span>SYNTHETIC SAMPLE</span></div>
+        <div class="evidence-main">
+          <svg class="readiness-ring" viewBox="0 0 120 120" role="img" aria-label="Sample run with nine of nine structural checks passed">
+            <circle class="track" cx="60" cy="60" r="46"/>
+            <circle class="value" cx="60" cy="60" r="46" transform="rotate(-90 60 60)"/>
+            <text class="score" x="60" y="61">9/9</text>
+            <text class="label" x="60" y="77">STRUCTURAL CHECKS</text>
+          </svg>
+          <dl class="run-meta">
+            <div><dt>PACK</dt><dd>ca-complete</dd></div>
+            <div><dt>VERSION</dt><dd>fingerprinted</dd></div>
+            <div><dt>FIXTURES</dt><dd>isolated / synthetic</dd></div>
+            <div><dt>EVIDENCE</dt><dd>non-PHI JSON</dd></div>
+          </dl>
+        </div>
+        <div class="evidence-checks">
+          <div class="evidence-check"><span>Message structures</span><b>PASS</b></div>
+          <div class="evidence-check"><span>Profile constraints</span><b>PASS</b></div>
+          <div class="evidence-check"><span>Terminology bindings</span><b>PASS</b></div>
+          <div class="evidence-check"><span>Audit evidence</span><b>PASS</b></div>
+        </div>
+        <div class="sample-note">ILLUSTRATIVE OUTPUT · NO PATIENT DATA · VERSIONED RUN RECORD</div>
+        <div class="evidence-foot"><span>CI GATE <strong>HTTP 200</strong></span><span>CERTIFICATION: NOT CONFERRED</span></div>
+      </div>
+    </div>
     <div class="numlist">
       <div class="numrow">
         <div class="n">01</div>
@@ -582,7 +802,7 @@
 
 <script>
 (function () {
-  // Hero stream: raw HL7 in → transformed FHIR out, typed character by character.
+  // Synthetic scenarios drive both the topology and the payload transformation.
   var frames = [
     {
       inStr: 'MSH|^~\\&|ACCURO|CLINIC|ENGINE|HUB|202610010900||ADT^A01|A001|P|2.5\nPID|1||CLN999^^^CLINIC^MR||DOE^JANE||19800101|F',
@@ -594,73 +814,131 @@
     },
     {
       inStr: 'MSH|^~\\&|BILLING|HOSP|ENGINE|HUB|202610010902||DFT^P03|B003|P|2.5\nFT1|1||20261001|20261001|CG|99213^OFFICE VISIT^CPT||1|EACH|150.00',
-      outStr: 'ISA*00*          *00*          *ZZ*ENGINE\n  *ZZ*PAYER        *261001*0902*^*00501*\nGS*HC*ENGINE*PAYER*20261001*\nST*837*0001*005010X222A1',
-      x12: true
+      outStr: 'ISA*00*          *00*          *ZZ*ENGINE\n  *ZZ*PAYER        *261001*0902*^*00501*\nGS*HC*ENGINE*PAYER*20261001*\nST*837*0001*005010X222A1'
     }
+  ];
+  var scenarioMeta = [
+    { source: 'EPIC ADT', dest: 'FHIR R4', route: 'ADT A01 → FHIR PATIENT' },
+    { source: 'OLIS ORU', dest: 'FHIR R4', route: 'ORU R01 → OBSERVATION' },
+    { source: 'BILLING DFT', dest: 'PAYER X12', route: 'DFT P03 → X12 837' }
   ];
   var inEl = document.getElementById('streamIn');
   var outEl = document.getElementById('streamOut');
+  var sourceLabel = document.getElementById('sourceLabel');
+  var destLabel = document.getElementById('destLabel');
+  var routeName = document.getElementById('routeName');
+  var topologyDesc = document.getElementById('topologyDesc');
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-scenario-button]'));
+  var paths = Array.prototype.slice.call(document.querySelectorAll('[data-scenario-path]'));
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var frame = 0;
+  var playToken = 0;
 
-  function typeInto(el, text, speed, done) {
-    el.innerHTML = '';
+  function updateScenario() {
+    var meta = scenarioMeta[frame];
+    sourceLabel.textContent = meta.source;
+    destLabel.textContent = meta.dest;
+    routeName.textContent = meta.route;
+    topologyDesc.textContent = 'Synthetic demonstration: ' + meta.route + ' through Interface Engine.';
+    buttons.forEach(function (button, index) {
+      var active = index === frame;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    paths.forEach(function (path, index) {
+      path.classList.toggle('active', index === frame);
+    });
+  }
+
+  function typeInto(el, text, speed, token, done) {
+    el.textContent = '';
+    var textNode = document.createTextNode('');
+    var cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    el.appendChild(textNode);
+    el.appendChild(cursor);
     var i = 0;
-    var cur = document.createElement('span');
-    cur.className = 'cursor';
-    el.appendChild(cur);
     function tick() {
-      var step = 3;
-      var n = Math.min(i + step, text.length);
-      el.innerHTML = text.slice(0, n).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-      i = n;
+      if (token !== playToken) return;
+      i = Math.min(i + 3, text.length);
+      textNode.nodeValue = text.slice(0, i);
       if (i < text.length) {
-        cur && el.appendChild(cur);
-        setTimeout(tick, speed);
+        window.setTimeout(tick, speed);
       } else {
-        if (cur.parentNode) cur.parentNode.removeChild(cur);
-        done && done();
+        cursor.remove();
+        if (done) done();
       }
     }
     tick();
   }
 
   function play() {
-    var f = frames[frame % frames.length];
-    typeInto(inEl, f.inStr, 14, function () {
-      typeInto(outEl, f.outStr, 10, function () {
-        setTimeout(function () {
+    frame = (frame + frames.length) % frames.length;
+    var token = ++playToken;
+    var current = frames[frame];
+    updateScenario();
+    if (reduceMotion) {
+      inEl.textContent = current.inStr;
+      outEl.textContent = current.outStr;
+      return;
+    }
+    typeInto(inEl, current.inStr, 14, token, function () {
+      typeInto(outEl, current.outStr, 10, token, function () {
+        window.setTimeout(function () {
+          if (token !== playToken) return;
           frame++;
           play();
         }, 2600);
       });
     });
   }
+
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      frame = Number(button.getAttribute('data-scenario-button'));
+      play();
+    });
+  });
   play();
 
-  // Edge label inverts over light/accent sections
+  // Navigation, edge label, and reading progress respond to the actual section.
   var edge = document.getElementById('edgeLabel');
+  var pill = document.querySelector('.pill');
+  var progress = document.getElementById('scrollProgress');
   var lit = Array.prototype.slice.call(document.querySelectorAll('.light, .band'));
-  function updateEdge() {
+  function updateChrome() {
     var mid = window.innerHeight / 2;
-    var onLight = lit.some(function (s) {
-      var r = s.getBoundingClientRect();
-      return r.top <= mid && r.bottom >= mid;
+    var onLight = lit.some(function (section) {
+      var rect = section.getBoundingClientRect();
+      return rect.top <= mid && rect.bottom >= mid;
     });
     edge.className = onLight ? 'edge light' : 'edge';
+    var navOnLight = lit.some(function (section) {
+      var rect = section.getBoundingClientRect();
+      return rect.top <= 44 && rect.bottom >= 44;
+    });
+    pill.classList.toggle('on-light', navOnLight);
+    var available = document.documentElement.scrollHeight - window.innerHeight;
+    var percent = available > 0 ? Math.min(100, Math.max(0, window.scrollY / available * 100)) : 0;
+    progress.style.width = percent + '%';
   }
-  window.addEventListener('scroll', updateEdge, { passive: true });
-  updateEdge();
+  window.addEventListener('scroll', updateChrome, { passive: true });
+  window.addEventListener('resize', updateChrome, { passive: true });
+  updateChrome();
 
-  // Scroll-reveal: fade each section's inner wrap in as it enters the viewport.
+  // Content remains immediately available when reduced motion is requested.
   var wraps = document.querySelectorAll('.sec > .wrap, footer > .wrap');
-  if ('IntersectionObserver' in window) {
-    wraps.forEach(function (w) { w.classList.add('reveal'); });
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    wraps.forEach(function (wrap) { wrap.classList.add('reveal'); });
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          observer.unobserve(entry.target);
+        }
       });
     }, { threshold: 0.08 });
-    wraps.forEach(function (w) { io.observe(w); });
+    wraps.forEach(function (wrap) { observer.observe(wrap); });
   }
 })();
 </script>
